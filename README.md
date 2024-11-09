@@ -6,6 +6,6 @@ Criar uma aplicação que calcula a taxa líquida de rendimento de um investimen
 
 > Instruções:
 
-Clone o projeto na IDE de sua preferência;
-Na estrutura do projeto selecione a SDK 21;
-Após isso faça o build.
+1. Clone o projeto na IDE de sua preferência;
+2. Na estrutura do projeto selecione a SDK 21;
+3. Após isso faça o build.
