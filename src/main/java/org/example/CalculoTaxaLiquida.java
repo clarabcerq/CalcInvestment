@@ -31,19 +31,20 @@ public class CalculoTaxaLiquida {
         System.out.println("Informe o capital inicial: ");
         capIn = sc.nextDouble();
 
-        System.out.println("Informe a taxa anual (em decimal): ");
+        System.out.println("Informe a taxa anual: ");
         taxa_anual = sc.nextDouble();
 
         System.out.println("Informe o número de anos: ");
         anos = sc.nextInt();
 
-        System.out.println("Informe a aliquota (em decimal): ");
+        System.out.println("Informe a aliquota: ");
         aliquota = sc.nextDouble();
     }
 
     //1- Montante final bruto usando juros compostos
     public double montante(double capIn, double taxa_anual, int anos) {
-        double resultadoPotencia = Math.pow(1 + taxa_anual, anos);
+        double taxa = taxa_anual / 100;
+        double resultadoPotencia = Math.pow(1 + taxa, anos);
         double m = capIn * resultadoPotencia;
         return m;
     }
@@ -57,9 +58,10 @@ public class CalculoTaxaLiquida {
 
     //3- Imposto de Renda. Como o investimento é de 2 anos, a alíquota de IR será de 15%.
     public double impostoRenda(double aliquota) {
+        double aliq = aliquota / 100;
         double m = montante(capIn, taxa_anual, anos);
         double lucroBruto = m - capIn;
-        double ir = lucroBruto * aliquota;
+        double ir = lucroBruto * aliq;
         return ir;
     }
 
