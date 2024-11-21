@@ -7,7 +7,7 @@ public class CalculoTaxaLiquida {
         CalculoTaxaLiquida c = new CalculoTaxaLiquida();
         c.lerEntradas();
 
-        double montante = c.montante(c.capIn, c.taxa_anual, c.anos);
+        double montante = c.montante(c.capIn, c.periodo);
         double lb = c.lucroBruto();
         double ir = c.impostoRenda(c.aliquota);
         double mLiq = c.mLiquido();
@@ -17,12 +17,12 @@ public class CalculoTaxaLiquida {
         System.out.println("Seu lucro bruto é de R$" + String.format("%.2f", lb));
         System.out.println("O imposto de renda que deverá ser pago é R$" + String.format("%.2f", ir));
         System.out.println("Seu montante líquido é R$" + String.format("%.2f", mLiq));
-        System.out.println("A sua taxa líquida anual, ou seja, quanto seu dinheiro renderá por ano é de " + String.format("%.2f", taxaLiquida) + "%");
+        System.out.println("A sua taxa líquida mensal, ou seja, quanto seu dinheiro renderá por mês é de " + String.format("%.2f", taxaLiquida) + "%");
     }
 
     private double capIn;
     private double taxa_anual;
-    private int anos;
+    private int periodo;
     private double aliquota;
 
     Scanner sc = new Scanner(System.in);
@@ -34,24 +34,29 @@ public class CalculoTaxaLiquida {
         System.out.println("Informe a taxa anual: ");
         taxa_anual = sc.nextDouble();
 
-        System.out.println("Informe o número de anos: ");
-        anos = sc.nextInt();
+        System.out.println("Informe o número de meses: ");
+        periodo = sc.nextInt();
 
         System.out.println("Informe a aliquota: ");
         aliquota = sc.nextDouble();
     }
 
+    //convertendo a taxa anual de rendimeno em uma taxa de rendimento mensal
+    public double conversaoTaxaAnualEmMensal(double taxa_anual) {
+        double taxaM = Math.pow(1 + taxa_anual / 100, (double) 1 / 12) - 1;
+        return taxaM;
+    }
+
     //1- Montante final bruto usando juros compostos
-    public double montante(double capIn, double taxa_anual, int anos) {
-        double taxa = taxa_anual / 100;
-        double resultadoPotencia = Math.pow(1 + taxa, anos);
+    public double montante(double capIn, int periodo) {
+        double resultadoPotencia = Math.pow(1 + conversaoTaxaAnualEmMensal(taxa_anual), periodo);
         double m = capIn * resultadoPotencia;
         return m;
     }
 
     //2- Lucro bruto
     public double lucroBruto(){
-        double m = montante(capIn, taxa_anual, anos);
+        double m = montante(capIn, periodo);
         double lucroBruto = m - capIn;
         return lucroBruto;
     }
@@ -59,7 +64,7 @@ public class CalculoTaxaLiquida {
     //3- Imposto de Renda. Como o investimento é de 2 anos, a alíquota de IR será de 15%.
     public double impostoRenda(double aliquota) {
         double aliq = aliquota / 100;
-        double m = montante(capIn, taxa_anual, anos);
+        double m = montante(capIn, periodo);
         double lucroBruto = m - capIn;
         double ir = lucroBruto * aliq;
         return ir;
@@ -67,7 +72,7 @@ public class CalculoTaxaLiquida {
 
     //4- Montante líquido após o IR
     public double mLiquido() {
-        double m = montante(capIn, taxa_anual, anos);
+        double m = montante(capIn, periodo);
         double ir = impostoRenda(aliquota);
         double mLiq = m - ir;
         return mLiq;
@@ -76,7 +81,7 @@ public class CalculoTaxaLiquida {
     //5- Taxa líquida anual
     public double taxaLiquidaAnual() {
         double mLiq = mLiquido();
-        double resultadoPotencia = Math.pow(mLiq / capIn, 1.0 / anos);
+        double resultadoPotencia = Math.pow(mLiq / capIn, 1.0 / periodo);
         double taxaLiquida = (resultadoPotencia - 1) * 100;
         return taxaLiquida;
     }
