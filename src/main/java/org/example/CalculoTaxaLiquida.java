@@ -7,25 +7,41 @@ public class CalculoTaxaLiquida {
     private double capIn;
     private double taxa_anual;
     private int periodo;
+    String resposta = "s";
 
     Scanner sc = new Scanner(System.in);
 
     public static void main(String[] args) {
         CalculoTaxaLiquida c = new CalculoTaxaLiquida();
-        c.lerEntradas();
-        c.periodo = c.validarPeriodo(c.periodo);
+        c.executar();
+    }
 
-        double montante = c.montante(c.capIn, c.periodo);
-        double lb = c.lucroBruto();
-        double ir = c.impostoRenda();
-        double mLiq = c.mLiquido();
-        double taxaLiquida = c.taxaLiquidaMensal();
+    public void executar() {
+        while (resposta.equalsIgnoreCase("s")) {
+            lerEntradas();
+            periodo = validarPeriodo(periodo);
 
-        System.out.println("O seu montante final bruto é R$" + String.format("%.2f", montante));
-        System.out.println("Seu lucro bruto é de R$" + String.format("%.2f", lb));
-        System.out.println("O imposto de renda que deverá ser pago é R$" + String.format("%.2f", ir));
-        System.out.println("Seu montante líquido é R$" + String.format("%.2f", mLiq));
-        System.out.println("A sua taxa líquida mensal, ou seja, quanto seu dinheiro renderá por mês é de " + String.format("%.2f", taxaLiquida) + "%");
+            double montante = montante(capIn, periodo);
+            double lb = lucroBruto();
+            double ir = impostoRenda();
+            double mLiq = mLiquido();
+            double taxaLiquida = taxaLiquidaMensal();
+
+            System.out.println("O seu montante final bruto é R$" + String.format("%.2f", montante));
+            System.out.println("Seu lucro bruto é de R$" + String.format("%.2f", lb));
+            System.out.println("O imposto de renda que deverá ser pago é R$" + String.format("%.2f", ir));
+            System.out.println("Seu montante líquido é R$" + String.format("%.2f", mLiq));
+            System.out.println("A sua taxa líquida mensal, ou seja, quanto seu dinheiro renderá por mês é de " + String.format("%.2f", taxaLiquida) + "%");
+
+            System.out.println("Deseja realizar outra simulação? (s/n): ");
+            resposta = sc.nextLine();
+
+            if (resposta.equalsIgnoreCase("n")) {
+                System.out.println("Programa encerrado.");
+                sc.close();
+                break;
+            }
+        }
     }
 
     public void lerEntradas() {
@@ -37,6 +53,7 @@ public class CalculoTaxaLiquida {
 
         System.out.println("Informe o número de meses: ");
         periodo = sc.nextInt();
+        sc.nextLine();
     }
 
     public int validarPeriodo(int periodo) {
@@ -100,4 +117,12 @@ public class CalculoTaxaLiquida {
         double taxaLiquida = (resultadoPotencia - 1) * 100;
         return taxaLiquida;
     }
+
+    public String pergunta() {
+        System.out.println("Deseja realizar outra simulação? (s/n): ");
+        return sc.nextLine();
+    }
+
+
+
 }
